@@ -1,0 +1,311 @@
+@import "tailwindcss";
+
+/*
+ * Stripe-inspired design system.
+ *
+ * The palette tokens, the `ds-*` component classes, and the typographic scale
+ * below are shared across every surface — the public survey runtime and the
+ * admin dashboard — so each composes from the same vocabulary instead of
+ * ad-hoc styles.
+ */
+
+:root {
+  --ink: #0a2540; /* primary headings + body on light */
+  --slate: #425466; /* secondary / body copy */
+  --slate-muted: #697386; /* captions, meta, eyebrows */
+  --blurple: #635bff; /* brand: buttons, links, accents */
+  --blurple-press: #5249e0; /* hover / active on primary */
+  --surface: #ffffff; /* base page surface */
+  --surface-alt: #f6f9fc; /* tinted section bands */
+  --hairline: #e6ebf1; /* borders, dividers, card edges */
+  --code-bg: #0a2540; /* dark code panel */
+  --code-bg-2: #0e2e52; /* code panel tab bar */
+}
+
+/* Expose the palette + fonts as Tailwind utilities (text-ink, bg-blurple,
+   border-hairline, …). `inline` resolves the var() references so next/font's
+   --font-* vars and the :root tokens above both flow through. */
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-slate-muted: var(--slate-muted);
+  --color-blurple: var(--blurple);
+  --color-blurple-press: var(--blurple-press);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-hairline: var(--hairline);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* --- Signature animated mesh gradient ------------------------------------ */
+.ds-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-color: var(--blurple);
+  background-image:
+    radial-gradient(at 18% 22%, #ff80b5 0px, transparent 55%),
+    radial-gradient(at 78% 12%, #9089fc 0px, transparent 50%),
+    radial-gradient(at 28% 78%, #41b9f5 0px, transparent 55%),
+    radial-gradient(at 88% 72%, #21c8b7 0px, transparent 50%),
+    radial-gradient(at 52% 48%, #9089fc 0px, transparent 60%);
+  background-size: 180% 180%;
+  background-position: 0% 0%;
+  animation: ds-drift 12s ease-in-out infinite;
+}
+
+@keyframes ds-drift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Restrained pulse — only for genuinely active work (e.g. the chat typing cue). */
+.ds-typing {
+  animation: ds-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes ds-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@layer components {
+  /* --- Layout primitives ------------------------------------------------- */
+  .ds-container {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1080px;
+    padding-inline: 1.5rem;
+  }
+  .ds-band {
+    background: var(--surface-alt);
+    border-block: 1px solid var(--hairline);
+  }
+
+  /* --- Typographic scale ------------------------------------------------- */
+  .ds-eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blurple);
+  }
+  .ds-display {
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .ds-h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .ds-h3 {
+    font-size: 1.375rem;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .ds-lead {
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    line-height: 1.55;
+    color: var(--slate);
+  }
+  .ds-stat {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--blurple);
+    font-variant-numeric: tabular-nums;
+  }
+  .ds-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  .ds-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    padding: 0.2rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--slate);
+  }
+  .ds-badge::before {
+    content: "";
+    height: 0.4rem;
+    width: 0.4rem;
+    border-radius: 9999px;
+    background: var(--blurple);
+  }
+
+  /* --- Buttons ----------------------------------------------------------- */
+  .ds-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.7rem 1.35rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1;
+    transition: background 160ms ease, box-shadow 160ms ease,
+      border-color 160ms ease, transform 160ms ease, color 160ms ease;
+  }
+  .ds-btn-sm {
+    padding: 0.5rem 0.95rem;
+    font-size: 0.875rem;
+  }
+  .ds-btn-primary {
+    background: var(--blurple);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(99, 91, 255, 0.25);
+  }
+  .ds-btn-primary:hover {
+    background: var(--blurple-press);
+    box-shadow: 0 6px 16px rgba(99, 91, 255, 0.32);
+  }
+  .ds-btn-primary:disabled {
+    opacity: 0.5;
+  }
+  .ds-btn-ghost {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+  }
+  .ds-btn-ghost:hover {
+    border-color: var(--blurple);
+    color: var(--blurple);
+  }
+  .ds-btn-ghost:disabled {
+    opacity: 0.4;
+  }
+
+  .ds-arrow {
+    display: inline-block;
+    transition: transform 160ms ease;
+  }
+  .ds-btn:hover .ds-arrow,
+  .ds-link:hover .ds-arrow {
+    transform: translateX(4px);
+  }
+
+  .ds-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: var(--blurple);
+  }
+
+  /* --- Cards ------------------------------------------------------------- */
+  .ds-card {
+    background: #fff;
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    box-shadow: 0 2px 5px rgba(60, 66, 87, 0.08), 0 1px 1px rgba(0, 0, 0, 0.06);
+  }
+  .ds-card-lift {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .ds-card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(60, 66, 87, 0.12), 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  /* --- Form controls (segmented choices, inputs) ------------------------- */
+  /* Selectable pill/box used by the survey + start form. The `is-on`
+     modifier marks the active choice. */
+  .ds-choice {
+    cursor: pointer;
+    border: 1px solid var(--hairline);
+    background: #fff;
+    color: var(--ink);
+    transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+  }
+  .ds-choice:hover {
+    border-color: var(--blurple);
+  }
+  .ds-choice.is-on {
+    border-color: var(--blurple);
+    background: var(--blurple);
+    color: #fff;
+  }
+  .ds-field {
+    width: 100%;
+    border: 1px solid var(--hairline);
+    background: #fff;
+    color: var(--ink);
+    border-radius: 0.5rem;
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+  }
+  .ds-field:focus {
+    border-color: var(--blurple);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.15);
+  }
+
+  /* --- Dark code / proof panel ------------------------------------------- */
+  .ds-code {
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--code-bg);
+    box-shadow: 0 30px 60px rgba(10, 37, 64, 0.35);
+  }
+  .ds-code-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--code-bg-2);
+  }
+  .ds-code pre {
+    overflow-x: auto;
+    padding: 1.25rem;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    font-family: var(--font-mono), monospace;
+  }
+}
+
+/* --- Focus ---------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--blurple);
+  outline-offset: 2px;
+}
+
+/* --- Reduced motion ------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-gradient { animation: none; }
+  .ds-card-lift:hover { transform: none; }
+  .ds-arrow { transition: none; }
+  .ds-typing { animation: none; opacity: 0.7; }
+}
