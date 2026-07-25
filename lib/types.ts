@@ -101,6 +101,12 @@ export interface Survey {
   /** Where submission notifications go (optional). */
   adminEmail?: string;
   notifyOnSubmit: boolean;
+  /**
+   * Whether the start form offers an optional email field. When true, a
+   * separate contacts database is required before responses can be collected
+   * against a remote analytics database — see `lib/db.ts`.
+   */
+  collectsEmail: boolean;
   settings: SurveySettings;
   /** Ordered section names. */
   sections: string[];
@@ -131,6 +137,8 @@ export interface SurveyDefinition {
   mode?: SurveyMode;
   adminEmail?: string;
   notifyOnSubmit?: boolean;
+  /** Offer an optional email field on the start page. Defaults to false. */
+  collectsEmail?: boolean;
   /** Ordered section names; question order follows array order within a section. */
   sections: string[];
   sectionIntros?: Record<string, string>;

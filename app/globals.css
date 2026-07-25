@@ -20,6 +20,15 @@
   --hairline: #e6ebf1; /* borders, dividers, card edges */
   --code-bg: #0a2540; /* dark code panel */
   --code-bg-2: #0e2e52; /* code panel tab bar */
+
+  /* System stacks by default: a template has to build in sandboxes with no
+     egress, and `next/font/google` fetches at build time. To use a real
+     typeface, add next/font in `app/layout.tsx` and point these at the
+     generated CSS variables. */
+  --font-inter: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
 }
 
 /* Expose the palette + fonts as Tailwind utilities (text-ink, bg-blurple,

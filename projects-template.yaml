@@ -1,0 +1,58 @@
+guided:
+  # guided.yaml defines saas / one_time_payment / static_site. This template has
+  # no billing surface, so it surfaces under "Something else" in guided mode —
+  # the same trade-off clerk/nextjs-auth makes.
+  category: survey
+  framework: nextjs
+template: lucasdickey/simple-survey
+variant: default
+default: true
+variant_description: Vercel • Turso • Clerk
+install_command: npm install
+metadata:
+  name: Simple Survey
+  description: Config-driven surveys with conditional logic, anonymous responses, and an analytics dashboard
+  owner: lucasdickey
+  tags:
+    - Survey
+    - Forms
+    - Analytics
+    - Turso
+    - Clerk
+    - Next.js
+repo: https://github.com/lucasdickey/simple-survey/tree/main
+# Pin to the release commit before submitting to the registry. Leave empty while
+# developing the template locally.
+ref: ""
+services:
+  - vercel/project
+  - clerk/auth
+  # Provisioned twice — once for analytics, once for contacts. See
+  # scripts/provision.sh.
+  - turso/database
+next_steps:
+  - label: Seed the example surveys
+    command: npm run seed
+  - label: Run locally
+    command: npm run dev
+  - label: Build product with Claude
+    command: claude "Help me turn this into a real product. Follow prompts/starter-to-product.md."
+  - label: Build product with Codex
+    command: codex "Help me turn this into a real product. Follow prompts/starter-to-product.md."
+  - label: Deploy
+    command: npm run deploy
+tier_plans:
+  vercel/project:
+    free_lowest_cost: Vercel/hobby
+    starter_paid: Vercel/pro
+    higher_scale: Vercel/pro
+  clerk/auth:
+    free_lowest_cost: Clerk/hobby
+    starter_paid: Clerk/pro
+    higher_scale: Clerk/pro
+  # Verify these plan slugs with `stripe projects catalog turso --json` before
+  # submitting — no registry template uses Turso yet, so they are unconfirmed.
+  turso/database:
+    free_lowest_cost: turso/starter
+    starter_paid: turso/scaler
+    higher_scale: turso/scaler
