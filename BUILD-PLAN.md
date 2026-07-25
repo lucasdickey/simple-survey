@@ -1,5 +1,29 @@
 # simple-survey — Build Plan
 
+> **Status: largely implemented. Read `README.md` and `AGENTS.md` first — they
+> describe what actually shipped.** This file is kept for design rationale.
+>
+> Four things here were corrected during implementation, verified against the
+> real `stripe/projects-template-registry` and `stripe/projects-templates`:
+>
+> 1. **§13 env var names are not what the CLI writes.** `stripe projects env
+>    --pull` names credentials after the *resource*, so `--name analytics-db`
+>    yields `ANALYTICS_DB_DATABASE_URL`, not `TURSO_DATABASE_URL`. Clerk arrives
+>    as a `CLERK_ENVIRONMENTS` JSON blob, not as two keys. Both are now resolved
+>    through fallback chains in `lib/turso-config.ts` and `lib/clerk-config.ts`.
+> 2. **§4/§8 `middleware.ts` is `proxy.ts`** on Next.js 16.
+> 3. **§8 email is `twilio/email`**, which is Twilio SendGrid, and Projects
+>    hands back OAuth client credentials rather than an `SG.` API key. The
+>    `@sendgrid/mail` path is gone.
+> 4. **§12's two example surveys were the point of the abstraction work.** The
+>    real `agentic-inc` question sets are replaced by two neutral demos —
+>    `product-feedback` and `event-signup` — that between them exercise every
+>    branch of the visibility engine.
+>
+> Also descoped for v1: chat/interview mode (§9), `lib/llm.ts` (§8), and
+> Recharts (§3). `survey.mode` and the types still support chat, and the schema
+> is self-migrating, so it can land later without a migration.
+
 A self-contained build spec for a **flexible, multi-survey platform** shipped as a
 **Stripe Projects template**, built in the repo **`lucasdickey/simple-survey`**.
 This file is the root build plan for that repo; execute the phases in order. It
